@@ -1,6 +1,7 @@
 package com.ies.spring_boot_ecommerce.controller;
 
 import com.ies.spring_boot_ecommerce.dto.ProductDto;
+import com.ies.spring_boot_ecommerce.dto.ProductListResponse;
 import com.ies.spring_boot_ecommerce.entity.ProductEntity;
 import com.ies.spring_boot_ecommerce.generics.AbstractController;
 import com.ies.spring_boot_ecommerce.generics.GenericService;
@@ -22,10 +23,11 @@ public class ProductController extends AbstractController<ProductEntity, Product
     }
 
     @GetMapping("/getAll/{categoryId}")
-    public ResponseEntity<List<ProductDto>> getAllByCategoryId(@PathVariable Long categoryId,
-                                                               @RequestParam(value = "page", required = false) Integer page) {
+    public ResponseEntity<ProductListResponse> getAllByCategoryId(@PathVariable Long categoryId,
+                                                                  @RequestParam(value = "page", required = false) Integer page,
+                                                                  @RequestParam(value = "size", required = false) Integer pageSize) {
         try {
-            return new ResponseEntity<>(this.productService.getAllDtoByCategoryId(categoryId, page), HttpStatus.OK);
+            return new ResponseEntity<>(this.productService.getAllDtoByCategoryId(categoryId, page, pageSize), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -34,9 +36,10 @@ public class ProductController extends AbstractController<ProductEntity, Product
 
     @GetMapping("/search")
     public ResponseEntity<List<ProductDto>> getAllBySearch(@RequestParam(value = "keyword", required = false) String keyword,
-                                                           @RequestParam(value = "page", required = false) Integer page) {
+                                                           @RequestParam(value = "page", required = false) Integer page,
+                                                           @RequestParam(value = "size", required = false) Integer pageSize) {
         try {
-            return new ResponseEntity<>(this.productService.getAllBySearch(keyword, page), HttpStatus.OK);
+            return new ResponseEntity<>(this.productService.getAllBySearch(keyword, page, pageSize), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
