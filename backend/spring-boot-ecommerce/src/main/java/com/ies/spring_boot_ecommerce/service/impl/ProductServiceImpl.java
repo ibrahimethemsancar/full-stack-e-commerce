@@ -34,12 +34,7 @@ public class ProductServiceImpl extends AbstractService<ProductEntity, ProductDt
         this.productRepository = productRepository;
         this.productMapper = mapper;
     }
-
-   /* @Override
-    public List<ProductDto> getAllDto() {
-        List<ProductEntity> productList = this.productRepository.findAll();
-        return productMapper.toDto(productList);
-    }*/
+    
 
     @Override
     public ProductListResponse getAllDtoByCategoryId(Long categoryId, Integer pageNumber, Integer pageSize) {
