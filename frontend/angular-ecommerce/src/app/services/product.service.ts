@@ -10,9 +10,9 @@ import { ProductCategory } from '../common/product-category';
 })
 export class ProductService {
 
-  private baseUrl = 'http://localhost:8080/products';
+  private baseUrl = 'http://localhost:8080/product';
 
-  private categoryUrl = 'http://localhost:8080/product-category';
+  private categoryUrl = 'http://localhost:8080/productcategory/getAll';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -31,8 +31,8 @@ export class ProductService {
                          theCategoryId: number): Observable<GetResponseProducts> {
 
     // need to build URL based on category id, page and size 
-    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`
-                    + `&page=${thePage}&size=${thePageSize}`;
+    const searchUrl = `${this.baseUrl}/getAll/${theCategoryId}`
+                    + `?page=${thePage}&size=${thePageSize}`;
 
     return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
@@ -46,12 +46,16 @@ export class ProductService {
     return this.getProducts(searchUrl);
   }
 
-  searchProducts(theKeyword: string): Observable<Product[]> {
+  searchProducts(theKeyword: string,
+    thePage: number, 
+    thePageSize: number
+  ): Observable<GetResponseProducts> {
 
     // need to build URL based on the keyword 
-    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
+    const searchUrl = `${this.baseUrl}/search?keyword=${theKeyword}`
+                    + `&page=${thePage}&size=${thePageSize}`;
 
-    return this.getProducts(searchUrl);
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
 
   private getProducts(searchUrl: string): Observable<Product[]> {
@@ -60,9 +64,7 @@ export class ProductService {
 
   getProductCategories(): Observable<ProductCategory[]> {
 
-    return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(
-      map(response => response.productCategory)
-    );
+    return this.httpClient.get<ProductCategory[]>(this.categoryUrl);
   }
 
 }

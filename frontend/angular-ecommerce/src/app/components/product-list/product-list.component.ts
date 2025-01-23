@@ -17,7 +17,7 @@ export class ProductListComponent implements OnInit {
 
   // new properties for pagination
   thePageNumber: number = 1;
-  thePageSize: number = 10;
+  thePageSize: number = 50;
   theTotalElements: number = 0;
 
   constructor(private productService: ProductService,
@@ -42,16 +42,22 @@ export class ProductListComponent implements OnInit {
 
   }
 
-  handleSearchProducts() {
-
+   handleSearchProducts() {
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
-
+  
     // now search for the products using keyword
-    this.productService.searchProducts(theKeyword).subscribe(
-      data => {
-        this.products = data;
-      }
-    )
+    
+    this.productService.searchProducts(theKeyword,
+      this.thePageNumber - 1,
+      this.thePageSize
+    ).subscribe( data => {
+      this.products = data.products;
+      this.thePageNumber = data.page.number + 1;
+      this.thePageSize = data.page.size;
+      this.theTotalElements = data.page.totalElements;
+    }  )
+
+    
   }
 
   handleListProducts() {
@@ -89,7 +95,7 @@ export class ProductListComponent implements OnInit {
                                                this.currentCategoryId)
                                                .subscribe(
                                                 data => {
-                                                  this.products = data._embedded.products;
+                                                  this.products = data.products;
                                                   this.thePageNumber = data.page.number + 1;
                                                   this.thePageSize = data.page.size;
                                                   this.theTotalElements = data.page.totalElements;
