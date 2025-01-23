@@ -1,0 +1,12 @@
+# Angular cache dosyaları
+.angular/cache/
+/frontend/angular-ecommerce/.angular/cache
+
+# Node_modules
+node_modules/
+
+# Build dosyaları
+dist/
+
+.history/
+.cache/
