@@ -59,11 +59,25 @@ public class ProductServiceImpl extends AbstractService<ProductEntity, ProductDt
     }
 
     @Override
-    public List<ProductDto> getAllBySearch(String keyword, Integer pageNumber, Integer pageSize) {
+    public ProductListResponse getAllBySearch(String keyword, Integer pageNumber, Integer pageSize) {
         Pageable pageWithElements = checkAndObtainPageNumber(pageNumber, pageSize);
 
-        List<ProductEntity> searchedProductList = this.productRepository.searchByName(keyword, pageWithElements).toList();
-        return this.productMapper.toDto(searchedProductList);
+        Page<ProductEntity> searchedProductListWithPage = this.productRepository.searchByName(keyword, pageWithElements);
+        List<ProductEntity> productList = searchedProductListWithPage.getContent();
+
+        ProductListResponse productListResponse = new ProductListResponse();
+        List<ProductDto> productDtoList = this.productMapper.toDto(productList);
+        productListResponse.setProducts(productDtoList);
+
+        PageDto pageDto = new PageDto();
+        pageDto.setTotalPages((long) searchedProductListWithPage.getTotalPages());
+        pageDto.setTotalElements(searchedProductListWithPage.getTotalElements());
+        pageDto.setNumber((long) searchedProductListWithPage.getNumber());
+        pageDto.setSize((long) searchedProductListWithPage.getSize());
+
+        productListResponse.setPage(pageDto);
+
+        return productListResponse;
 
     }
 

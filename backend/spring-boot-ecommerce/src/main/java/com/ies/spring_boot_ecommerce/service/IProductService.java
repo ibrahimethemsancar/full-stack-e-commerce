@@ -12,5 +12,5 @@ public interface IProductService extends GenericService<ProductEntity, ProductDt
 
     ProductListResponse getAllDtoByCategoryId(Long categoryId, Integer page, Integer pageSize);
 
-    List<ProductDto> getAllBySearch(String keyword, Integer page, Integer pageSize);
+    ProductListResponse getAllBySearch(String keyword, Integer page, Integer pageSize);
 }

@@ -35,7 +35,7 @@ public class ProductController extends AbstractController<ProductEntity, Product
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDto>> getAllBySearch(@RequestParam(value = "keyword", required = false) String keyword,
+    public ResponseEntity<ProductListResponse> getAllBySearch(@RequestParam(value = "keyword", required = false) String keyword,
                                                            @RequestParam(value = "page", required = false) Integer page,
                                                            @RequestParam(value = "size", required = false) Integer pageSize) {
         try {
